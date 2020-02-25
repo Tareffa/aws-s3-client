@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
@@ -33,10 +34,11 @@ public class ArquivosService {
     @Inject
     AwsService awsService;
 
-    public String store(MultipartFile file, SalvarArquivoRequest detalhes, OAuth2Authentication authentication) throws Exception {
+    public String store(MultipartFile file, SalvarArquivoRequest detalhes, OAuth2Authentication authentication)
+            throws Exception {
 
         Bucket bucket = this.bucketRepository.findByAplicationId(detalhes.getApplicationId())
-                             .orElseThrow(() -> new NoResultException("Bucket não encontrado!"));
+                .orElseThrow(() -> new NoResultException("Bucket não encontrado!"));
 
         File tmp = createTemporaryFile(file);
 
@@ -49,17 +51,22 @@ public class ArquivosService {
 
         System.out.println("" + file.getOriginalFilename());
         System.out.println("" + file.getOriginalFilename());
-        
-        String originalFilename = file.getOriginalFilename();
-        File tmp = File.createTempFile(UUID.randomUUID().toString() + "__", originalFilename);
 
-        Files.copy(
-            file.getInputStream(), 
-            Paths.get(tmp.getAbsolutePath()), 
-            StandardCopyOption.REPLACE_EXISTING
-        );
+        String originalFilename = file.getOriginalFilename();
+        File tmp = File.createTempFile("nome", ".png");
+
+        Files.copy(file.getInputStream(), Paths.get(tmp.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
 
         return tmp;
+    }
+
+    public void multipartFileToFile(MultipartFile multipart, Path dir) throws IOException {
+        Path filepath = Paths.get(dir.toString(), multipart.getOriginalFilename());
+        multipart.transferTo(filepath);
+    }
+
+    public String getFileExtension(String filename) {
+        return "";
     }
 
 }
