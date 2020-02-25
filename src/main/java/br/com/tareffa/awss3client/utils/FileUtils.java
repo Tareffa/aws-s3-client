@@ -56,8 +56,17 @@ public class FileUtils {
         }
     }
 
+    public static File createTemporaryFileWithHash(String filename, InputStream inputStream) throws IOException {
+        String extension = "." + getFileExtension(filename);
+        File tmp = File.createTempFile(UUID.randomUUID().toString(), extension);
+        tmp.deleteOnExit();
+        Files.copy(inputStream, Paths.get(tmp.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
+        return tmp;
+    }
+
     public static File createTemporaryFile(String filename, InputStream inputStream) throws IOException {
-        File tmp = File.createTempFile(UUID.randomUUID().toString(), getFileExtension(filename));
+        String extension = "." + getFileExtension(filename);
+        File tmp = File.createTempFile(filename.replace(extension, ""), extension);
         tmp.deleteOnExit();
         Files.copy(inputStream, Paths.get(tmp.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
         return tmp;
@@ -65,7 +74,8 @@ public class FileUtils {
 
     public static File createTemporaryFile(MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
-        File tmp = File.createTempFile(UUID.randomUUID().toString(), getFileExtension(originalFilename));
+        String extension = "." + getFileExtension(originalFilename);
+        File tmp = File.createTempFile(UUID.randomUUID().toString(), extension);
         tmp.deleteOnExit();
         Files.copy(file.getInputStream(), Paths.get(tmp.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
         return tmp;
