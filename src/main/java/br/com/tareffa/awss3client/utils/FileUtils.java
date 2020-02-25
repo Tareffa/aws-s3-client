@@ -9,11 +9,26 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.web.multipart.MultipartFile;
 
 public class FileUtils {
+    //
+    public static String getContentType(Resource resource, HttpServletRequest request) throws Exception {
+        String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        return (contentType == null) ? "application/octet-stream" : contentType;
+    }
+
+    public static String getContentDisposition(Resource resource, String contentDisposition) throws Exception {
+        return String.format("%s;filename=\"%s\"", contentDisposition, resource.getFilename());
+    }
+
+    public static String getContentDisposition(Resource resource) throws Exception {
+        return getContentDisposition(resource, "inline");
+    }
 
     public static Resource loadFileAsResource(String filename) throws Exception {
         try {
