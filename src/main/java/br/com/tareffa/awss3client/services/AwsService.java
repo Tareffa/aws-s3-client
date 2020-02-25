@@ -9,6 +9,7 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3Object;
@@ -83,7 +84,10 @@ public class AwsService {
 
 	private PutObjectResult putObject(String key, File file, Bucket bucket, AmazonS3 s3client) 
 			throws AmazonServiceException, AmazonClientException {
-		return s3client.putObject(new PutObjectRequest(bucket.getBucketName(), key, file));
+		return s3client.putObject(
+			new PutObjectRequest(bucket.getBucketName(), key, file)
+				.withCannedAcl(CannedAccessControlList.PublicRead)
+		);
 	}
 
     private AmazonS3 s3client(Bucket bucket) {
