@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.MessageFormat;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -42,31 +43,28 @@ public class ArquivosService {
 
         File tmp = createTemporaryFile(file);
 
-        awsService.upload(tmp, bucket);
+        String filename = MessageFormat.format(
+            "{0}__{1}", UUID.randomUUID().toString(), file.getOriginalFilename()
+        );
+
+        awsService.upload(tmp, filename, bucket);
 
         return "";
     }
 
-    File createTemporaryFile(MultipartFile file) throws IOException {
-
-        System.out.println("" + file.getOriginalFilename());
-        System.out.println("" + file.getOriginalFilename());
-
+    private File createTemporaryFile(MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
-        File tmp = File.createTempFile("nome", ".png");
+
+        File tmp = File.createTempFile(UUID.randomUUID().toString(), getFileExtension(originalFilename));
+        tmp.deleteOnExit();
 
         Files.copy(file.getInputStream(), Paths.get(tmp.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
 
         return tmp;
     }
 
-    public void multipartFileToFile(MultipartFile multipart, Path dir) throws IOException {
-        Path filepath = Paths.get(dir.toString(), multipart.getOriginalFilename());
-        multipart.transferTo(filepath);
-    }
-
-    public String getFileExtension(String filename) {
-        return "";
+    private String getFileExtension(String filename) {
+        return filename.contains(".") ? filename.substring(filename.lastIndexOf(".") + 1) : ".tmp";
     }
 
 }

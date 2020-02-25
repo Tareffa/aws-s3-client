@@ -1,6 +1,8 @@
 package br.com.tareffa.awss3client.services;
 
 import java.io.File;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
@@ -10,6 +12,8 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 
 import org.springframework.stereotype.Service;
 
@@ -18,14 +22,21 @@ import br.com.tareffa.awss3client.domain.models.Bucket;
 @Service
 public class AwsService {
 
-    public void upload(File file, Bucket bucket) {
-        this.upload(file, bucket, s3client(bucket));
+    public void upload(File file, String filename, Bucket bucket) {
+        this.upload(file, filename, bucket, s3client(bucket));
     }
 
-    public void upload(File file, Bucket bucket, AmazonS3 s3client) {
+    public void upload(File file, String filename, Bucket bucket, AmazonS3 s3client) {
 		
 		try {
-	        s3client.putObject(new PutObjectRequest(bucket.getBucketName(), file.getName(), file));
+			PutObjectResult result = s3client.putObject(new PutObjectRequest(bucket.getBucketName(), filename, file));
+			
+			ObjectMetadata meta = result.getMetadata();
+			
+			for (Map.Entry<String, Object> entry : meta.getRawMetadata().entrySet()) {
+				System.out.println(entry.getKey() + " - " + entry.getValue());
+			}
+
 	        System.out.println("===================== Upload File - Done! =====================");
 	        
 		} catch (AmazonServiceException ase) {
