@@ -46,12 +46,16 @@ public class ArquivosService {
     }
 
     File createTemporaryFile(MultipartFile file) throws IOException {
+
+        System.out.println("" + file.getOriginalFilename());
+        System.out.println("" + file.getOriginalFilename());
+
         String originalFilename = file.getOriginalFilename();
-        File tmp = File.createTempFile("", originalFilename.substring(originalFilename.lastIndexOf("/")+1));
+        File tmp = File.createTempFile("", originalFilename);
 
         Files.copy(
             file.getInputStream(), 
-            Paths.get(tmp.getAbsolutePath()).toAbsolutePath().normalize(), 
+            Paths.get(tmp.getAbsolutePath()), 
             StandardCopyOption.REPLACE_EXISTING
         );
 
