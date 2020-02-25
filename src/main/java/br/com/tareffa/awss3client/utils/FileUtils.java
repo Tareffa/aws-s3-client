@@ -57,7 +57,8 @@ public class FileUtils {
     }
 
     public static File createTemporaryFile(String filename, InputStream inputStream) throws IOException {
-        File tmp = File.createTempFile(UUID.randomUUID().toString(), "." + getFileExtension(filename));
+        String name = filename.contains(".") ? filename.substring(0, filename.indexOf(".")) : filename;
+        File tmp = File.createTempFile(name, "." + getFileExtension(filename));
         tmp.deleteOnExit();
         Files.copy(inputStream, Paths.get(tmp.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
         return tmp;
