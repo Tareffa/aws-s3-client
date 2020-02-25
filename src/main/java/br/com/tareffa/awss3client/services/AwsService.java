@@ -12,21 +12,20 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import br.com.tareffa.awss3client.domain.models.Bucket;
 
 @Service
 public class AwsService {
 
-    public void store(MultipartFile file, Bucket bucket) {
-        AmazonS3 s3client = s3client(bucket);
+    public void upload(File file, Bucket bucket) {
+        this.upload(file, bucket, s3client(bucket));
     }
 
-    public void uploadFile(String keyName, File file, Bucket bucket, AmazonS3 s3client) {
+    public void upload(File file, Bucket bucket, AmazonS3 s3client) {
 		
 		try {
-	        s3client.putObject(new PutObjectRequest(bucket.getBucketName(), keyName, file));
+	        s3client.putObject(new PutObjectRequest(bucket.getBucketName(), file.getName(), file));
 	        System.out.println("===================== Upload File - Done! =====================");
 	        
 		} catch (AmazonServiceException ase) {

@@ -28,7 +28,7 @@ public class ArquivosController { // @formatter:off
             @RequestParam("file") MultipartFile file, 
             OAuth2Authentication authentication) throws Exception {
 
-        return ResponseEntity.ok(file.getOriginalFilename());
+        return ResponseEntity.ok(service.store(file, detalhes, authentication));
     }
 
 }
