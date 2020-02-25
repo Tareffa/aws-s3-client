@@ -1,0 +1,50 @@
+server:
+  servlet:
+    context-path: 
+  port: ${PORT:9000}
+
+spring:
+  datasource:
+    # url: jdbc:postgresql://ec2-52-6-127-178.compute-1.amazonaws.com:5432/damb6283prkq9p
+    # username: uepk2rsledmshj
+    # password: p711450fa9e084d1126dc642c5f0401b69133a6ecbe9029702a4f546f74b1132c
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show-sql: ${HIBERNATE_SHOW_SQL:false}
+    properties:
+      hibernate:
+        generate_statistics: ${HIBERNATE_STATISTICS:false}
+        temp:
+          use_jdbc_metadata_defaults: false
+
+oauth2-config:
+  client-id: ${CLIENT_ID:76179baad962d1b8ce4d}
+  client-secret: ${CLIENT_SECRET:8faedc0e6e1520d13f06f787d6760c303f3e8768}
+  server-url: ${OAUTH2_URL:https://development-oauth-server.herokuapp.com}
+
+# depara:
+#   service:
+#     name: depara-service
+#     url: ${DEPARA_BASE_URL:https://development-api-depara.herokuapp.com}
+
+oauth:
+  service:
+    name: oauth-service
+    url: ${OAUTH2_URL:https://development-oauth-server.herokuapp.com}
+
+security:
+  oauth2:
+    client:
+      clientId: ${oauth2-config.client-id}
+      clientSecret: ${oauth2-config.client-secret}
+      accessTokenUri: ${oauth2-config.server-url}/oauth/token
+      userAuthorizationUri: ${oauth2-config.server-url}/oauth/authorize
+
+    resource:
+      userInfoUri: ${oauth2-config.server-url}/user/info
+      tokenInfoUri: ${oauth2-config.server-url}/oauth/check_token
