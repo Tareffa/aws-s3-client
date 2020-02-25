@@ -31,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         String[] _allowed = Arrays.asList(new String[] {
-                "/", "/oauth/**", "/auth/**"
+                "/", "/oauth/**", "/auth/**", "/resources/**"
         }).toArray(new String[] {});
 
          String[] _protected = Arrays.asList(new String[] {
@@ -40,9 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
             .authorizeRequests()
-                .antMatchers(_allowed).permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/arquivos/*/view").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/arquivos/*/download").permitAll();
+                .antMatchers(_allowed).permitAll();
 
         http
             .csrf().disable()
