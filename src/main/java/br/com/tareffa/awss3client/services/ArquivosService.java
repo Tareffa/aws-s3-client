@@ -46,7 +46,8 @@ public class ArquivosService {
     }
 
     File createTemporaryFile(MultipartFile file) throws IOException {
-        File tmp = File.createTempFile(file.getOriginalFilename(), "");
+        String originalFilename = file.getOriginalFilename();
+        File tmp = File.createTempFile("", originalFilename.substring(originalFilename.lastIndexOf("/")));
 
         Files.copy(
             file.getInputStream(), 
