@@ -49,9 +49,9 @@ public class ArquivosService {
 
         System.out.println("" + file.getOriginalFilename());
         System.out.println("" + file.getOriginalFilename());
-
+        
         String originalFilename = file.getOriginalFilename();
-        File tmp = File.createTempFile("", originalFilename);
+        File tmp = File.createTempFile(UUID.randomUUID().toString() + "__", originalFilename);
 
         Files.copy(
             file.getInputStream(), 
