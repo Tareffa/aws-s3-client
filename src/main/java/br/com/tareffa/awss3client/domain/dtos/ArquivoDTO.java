@@ -19,4 +19,10 @@ public class ArquivoDTO implements Serializable {
 
     private BigInteger id;
 
+    private BigInteger contabilidadeId;
+
+    private BigInteger empresaId;
+
+    private Boolean processado;
+
 }
