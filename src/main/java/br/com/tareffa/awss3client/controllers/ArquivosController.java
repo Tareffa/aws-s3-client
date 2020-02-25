@@ -42,10 +42,8 @@ public class ArquivosController { // @formatter:off
     @GetMapping
     public ResponseEntity<?> findAll(@Valid ArquivoDTO arquivo, 
     								 @RequestHeader("Authorization") String authorization){
-    	
     	UserDTO userInfo = oauthClient.getUserInfo(authorization).getBody().getRecord();
-//    	ResponseEntity resp = service.
-    	return null;
+    	return ResponseEntity.ok(service.findAll(arquivo, userInfo));
     }
 
 }
