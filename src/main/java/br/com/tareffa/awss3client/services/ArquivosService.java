@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
+import javax.validation.Valid;
 
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,9 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.tareffa.awss3client.client.OAuthClient;
 import br.com.tareffa.awss3client.domain.commands.SalvarArquivoRequest;
+import br.com.tareffa.awss3client.domain.criterias.PageCriteria;
 import br.com.tareffa.awss3client.domain.dtos.ArquivoDTO;
 import br.com.tareffa.awss3client.domain.mappers.ArquivoMapper;
 import br.com.tareffa.awss3client.domain.dtos.UserDTO;
@@ -38,6 +41,9 @@ public class ArquivosService {
 
     @Inject
     ArquivosRepository arquivosRepository;
+
+    @Inject
+    OAuthClient oauthClient;
 
     @Inject
     AwsService awsService;
@@ -80,11 +86,15 @@ public class ArquivosService {
         );
     }
 
-	public Page<Arquivo> findAll(ArquivoDTO arquivo, UserDTO userInfo) {
+	public Page<Arquivo> findAll(ArquivoDTO arquivo, PageCriteria pageCriteria, String authorization) {
+    	UserDTO userInfo = oauthClient.getUserInfo(authorization).getBody().getRecord();
+
 		if(arquivo.getContabilidadeId() != null) {
 			arquivo.setContabilidadeId(userInfo.getOrganizationId());
 		}
-		return null;
+		
+		
+		return arquivosRepository.findAll(arquivo, PageRequest.of(pageCriteria.getPageIndex(), pageCriteria.getPageSize()));
 	}
 
 }
