@@ -1,23 +1,20 @@
 package br.com.tareffa.awss3client.services;
 
 import java.io.File;
-import java.util.Map;
-import java.util.Map.Entry;
+
+import org.springframework.stereotype.Service;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-
-import org.springframework.stereotype.Service;
+import com.amazonaws.services.s3.model.S3Object;
 
 import br.com.tareffa.awss3client.domain.models.Bucket;
 import br.com.tareffa.awss3client.utils.FileUtils;

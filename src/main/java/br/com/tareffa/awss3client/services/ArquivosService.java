@@ -1,18 +1,12 @@
 package br.com.tareffa.awss3client.services;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.MessageFormat;
 import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
-import javax.validation.Valid;
 
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Example;
@@ -28,8 +22,8 @@ import br.com.tareffa.awss3client.client.OAuthClient;
 import br.com.tareffa.awss3client.domain.commands.SalvarArquivoRequest;
 import br.com.tareffa.awss3client.domain.criterias.PageCriteria;
 import br.com.tareffa.awss3client.domain.dtos.ArquivoDTO;
-import br.com.tareffa.awss3client.domain.mappers.ArquivoMapper;
 import br.com.tareffa.awss3client.domain.dtos.UserDTO;
+import br.com.tareffa.awss3client.domain.mappers.ArquivoMapper;
 import br.com.tareffa.awss3client.domain.models.Arquivo;
 import br.com.tareffa.awss3client.domain.models.Bucket;
 import br.com.tareffa.awss3client.repositories.ArquivosRepository;

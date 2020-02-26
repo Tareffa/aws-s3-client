@@ -20,11 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import br.com.tareffa.awss3client.client.OAuthClient;
 import br.com.tareffa.awss3client.domain.commands.SalvarArquivoRequest;
 import br.com.tareffa.awss3client.domain.criterias.PageCriteria;
 import br.com.tareffa.awss3client.domain.dtos.ArquivoDTO;
-import br.com.tareffa.awss3client.domain.dtos.UserDTO;
 import br.com.tareffa.awss3client.services.ArquivosService;
 import br.com.tareffa.awss3client.utils.FileUtils;
 
