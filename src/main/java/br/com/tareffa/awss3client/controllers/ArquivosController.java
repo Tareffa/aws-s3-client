@@ -20,10 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import br.com.tareffa.awss3client.client.OAuthClient;
 import br.com.tareffa.awss3client.domain.commands.SalvarArquivoRequest;
+import br.com.tareffa.awss3client.domain.criterias.PageCriteria;
 import br.com.tareffa.awss3client.domain.dtos.ArquivoDTO;
-import br.com.tareffa.awss3client.domain.dtos.UserDTO;
 import br.com.tareffa.awss3client.services.ArquivosService;
 import br.com.tareffa.awss3client.utils.FileUtils;
 
@@ -34,9 +33,6 @@ public class ArquivosController { // @formatter:off
     @Inject
     ArquivosService service;
     
-    @Inject
-    OAuthClient oauthClient;
-
     @PostMapping(path = "", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> upload(
             @Valid SalvarArquivoRequest detalhes,
@@ -48,9 +44,9 @@ public class ArquivosController { // @formatter:off
     
     @GetMapping
     public ResponseEntity<?> findAll(@Valid ArquivoDTO arquivo, 
+    								 @Valid PageCriteria pageCriteria, 
     								 @RequestHeader("Authorization") String authorization){
-    	UserDTO userInfo = oauthClient.getUserInfo(authorization).getBody().getRecord();
-    	return ResponseEntity.ok(service.findAll(arquivo, userInfo));
+    	return ResponseEntity.ok(service.findAll(arquivo, pageCriteria, authorization));
     }
 
     @GetMapping("/{id}/download")
