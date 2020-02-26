@@ -15,6 +15,9 @@ import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -86,15 +89,18 @@ public class ArquivosService {
         );
     }
 
-	public Page<Arquivo> findAll(ArquivoDTO arquivo, PageCriteria pageCriteria, String authorization) {
+	public Page<ArquivoDTO> findAll(ArquivoDTO filter, PageCriteria pageCriteria, String authorization) {
     	UserDTO userInfo = oauthClient.getUserInfo(authorization).getBody().getRecord();
 
-		if(arquivo.getContabilidadeId() != null) {
-			arquivo.setContabilidadeId(userInfo.getOrganizationId());
+		if(filter.getContabilidadeId() != null) {
+			filter.setContabilidadeId(userInfo.getOrganizationId());
 		}
 		
+		ExampleMatcher matcher = ExampleMatcher.matching().withStringMatcher(StringMatcher.CONTAINING);
+		Example<Arquivo> example = Example.of(ArquivoMapper.fromDto(filter), matcher);
 		
-		return arquivosRepository.findAll(arquivo, PageRequest.of(pageCriteria.getPageIndex(), pageCriteria.getPageSize()));
+		return arquivosRepository.findAll(example, PageRequest.of(pageCriteria.getPageIndex(), pageCriteria.getPageSize()))
+								 .map(ArquivoMapper::fromEntity);
 	}
 
 }
