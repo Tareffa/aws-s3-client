@@ -11,7 +11,7 @@ import br.com.tareffa.awss3client.domain.dtos.UserDTO;
 import br.com.tareffa.awss3client.domain.responses.GenericResponse;
 
 
-@FeignClient(name = "OAuthClient", url = "${oauth2-config.server-url}")
+@FeignClient(name = "${oauth.service.name}", url = "${oauth.service.url}") // @formatter:off
 public interface OAuthClient {
 	
 	@GetMapping("/oauth/userinfo")
